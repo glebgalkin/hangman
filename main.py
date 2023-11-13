@@ -1,23 +1,14 @@
-import random
 import constants
+import util
 
 print(constants.gameIntro)
-
 isFound = False
+generatedWord, gameProgressString = util.generateRandomWord()
 
-words = ['hello', 'world', 'gleb']
-rand = random.randint(0, 0)
-generatedWord = words[rand]
-
-gameProgressString = ['_'] * len(generatedWord)
-
-limit = 5
 currentAttemptNumber = 5
 current = 0
-
-while current <= limit:
-    print(gameProgressString)
-    print(f"Attempts left: {currentAttemptNumber}")
+while current <= constants.GAME_ERROR_LIMIT:
+    util.printGameStatus(gameProgressString, currentAttemptNumber)
     ser_input = input("Please enter the letter: ")
     indexes = [index for index, char in enumerate(generatedWord) if char == ser_input]
     if len(indexes):
@@ -27,13 +18,16 @@ while current <= limit:
             isFound = True
             break
     else:
-        print(constants.gameStatus[current])
+        util.printCurrentPainting(current)
         current += 1
         currentAttemptNumber -= 1
 
 if isFound:
-    print(gameProgressString)
+    print('\n')
+    for k in gameProgressString:
+        print(k, end='')
     print("Game winner!")
 else:
     print(constants.gameStatus[-1])
     print("Game loser!")
+    print("Generated word was:", generatedWord)
